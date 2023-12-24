@@ -27,7 +27,7 @@ Quantum computing harnesses the unique behavior of quantum physics, such as supe
 Clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/your-username/QuantumComputingExperiments.git
+git clone https://github.com/krishnamshah/QuantumComputingExperiments.git
 ```
 
 Navigate to the cloned directory:
