@@ -1,4 +1,5 @@
 
+
 # Quantum Computing Experiments
 
 Welcome to Quantum Computing Experiments! This repository is dedicated to exploring fundamental quantum algorithms and concepts through practical coding examples. Our primary focus is on demonstrating basic principles of quantum computing to those new to the field or interested in its applications.
@@ -65,3 +66,4 @@ This project is licensed under the MIT License - see the `LICENSE` file for deta
 
 - Thanks to the Qiskit community and IBM for their extensive resources on quantum computing.
 - Special thanks to all contributors who have helped to make this project educational and insightful.
+
