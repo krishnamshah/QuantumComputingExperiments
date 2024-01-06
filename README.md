@@ -47,6 +47,10 @@ This experiment demonstrates the concept of superposition. A qubit is placed in 
 
 The Deutsch-Josza algorithm is one of the earliest examples demonstrating the power of quantum computers. It can determine whether a given function is constant or balanced (outputting an equal number of 0s and 1s) in a single evaluation - a task impossible for classical computers to achieve with the same efficiency.
 
+### Quantum Teleportation Experiment
+
+Quantum teleportation is a fascinating phenomenon in quantum computing and quantum information theory. It involves transferring the state of a qubit from one location to another, using quantum entanglement and classical communication. This experiment demonstrates the basic principles of quantum teleportation.
+
 #### Understanding the Results
 
 - If the algorithm outputs all 0s, the function is constant.
