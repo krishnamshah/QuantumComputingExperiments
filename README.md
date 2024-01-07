@@ -23,6 +23,12 @@ Quantum computing harnesses the unique behavior of quantum physics, such as supe
   pip install qiskit
   ```
 
+```bash
+pip install pip-tools
+pip-compile deploy/requirements.in
+pip install -r deploy/requirements.txt
+```  
+
 ### Installation
 
 Clone the repository to your local machine:
