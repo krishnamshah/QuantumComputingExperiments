@@ -10,8 +10,13 @@ Quantum computing harnesses the unique behavior of quantum physics, such as supe
 
 ### Current Experiments
 
-- **Superposition and Measurement**: A simple demonstration of quantum superposition using a Hadamard gate.
-- **Deutsch-Josza Algorithm**: An implementation of the Deutsch-Josza algorithm, showcasing the efficiency of quantum algorithms for specific problems.
+1. **Superposition and Measurement**: Demonstrates the quantum principle of superposition using a Hadamard gate.
+2. **Deutsch-Josza Algorithm**: Implements the Deutsch-Josza algorithm to showcase the efficiency of quantum algorithms.
+3. **Bell State**: Creates and measures a Bell State, demonstrating the concept of quantum entanglement.
+4. **Quantum Fourier Transform (QFT)**: Implements the Quantum Fourier Transform, a key component in many quantum algorithms.
+5. **Quantum Teleportation**: Demonstrates the teleportation of a qubit's state using quantum entanglement and classical communication.
+6. **Quantum Random Number Generator (QRNG)**: Generates truly random numbers by exploiting the inherent randomness of quantum mechanics.
+
 
 ## Getting Started
 
@@ -22,6 +27,12 @@ Quantum computing harnesses the unique behavior of quantum physics, such as supe
   ```bash
   pip install qiskit
   ```
+
+```bash
+pip install pip-tools
+pip-compile deploy/requirements.in
+pip install -r deploy/requirements.txt
+```  
 
 ### Installation
 
@@ -37,21 +48,6 @@ Navigate to the cloned directory:
 cd QuantumComputingExperiments
 ```
 
-## Experiments
-
-### Superposition and Measurement
-
-This experiment demonstrates the concept of superposition. A qubit is placed in a superposition state using a Hadamard gate, and then measured. The outcome is probabilistic, showcasing one of the fundamental principles of quantum mechanics.
-
-### Deutsch-Josza Algorithm
-
-The Deutsch-Josza algorithm is one of the earliest examples demonstrating the power of quantum computers. It can determine whether a given function is constant or balanced (outputting an equal number of 0s and 1s) in a single evaluation - a task impossible for classical computers to achieve with the same efficiency.
-
-#### Understanding the Results
-
-- If the algorithm outputs all 0s, the function is constant.
-- If there is at least one 1, the function is balanced.
-
 This experiment is crucial for understanding quantum parallelism and interference.
 
 ## Contributing
@@ -65,5 +61,4 @@ This project is licensed under the MIT License - see the `LICENSE` file for deta
 ## Acknowledgments
 
 - Thanks to the Qiskit community and IBM for their extensive resources on quantum computing.
-- Special thanks to all contributors who have helped to make this project educational and insightful.
 
