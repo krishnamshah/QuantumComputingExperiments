@@ -1,13 +1,19 @@
 from qiskit import Aer, execute, QuantumCircuit
 from qiskit.circuit import Parameter
-from qiskit.optimization.applications.ising import max_cut
-from qiskit.aqua.algorithms import NumPyMinimumEigensolver
-from qiskit.optimization.applications.ising.common import sample_most_likely
-from qiskit.aqua.operators import Z, X, I, CircuitStateFn, PauliExpectation, StateFn
-from qiskit.aqua.operators.gradients import Gradient
+from qiskit.opflow import (
+    Z,
+    X,
+    I,
+    StateFn,
+    PauliExpectation,
+    CircuitSampler,
+    AerPauliExpectation,
+)
+from qiskit.utils import QuantumInstance
+from qiskit.algorithms.optimizers import COBYLA
 import numpy as np
 
-# Define the graph for the Max-Cut problem
+# Define a simple Max-Cut problem
 edges = [(0, 1)]
 
 
@@ -19,8 +25,7 @@ def qaoa_circuit(beta, gamma):
     for i in range(n_qubits):
         qc.h(i)
     # Problem unitary
-    for edge in edges:
-        i, j = edge
+    for i, j in edges:
         qc.rzz(2 * gamma, i, j)
     # Mixer unitary
     for i in range(n_qubits):
@@ -28,26 +33,29 @@ def qaoa_circuit(beta, gamma):
     return qc
 
 
-# Objective function
+# Objective function for QAOA
 def objective_function(params):
+    backend = Aer.get_backend("statevector_simulator")
+    qi = QuantumInstance(backend)
     beta, gamma = params
     qc = qaoa_circuit(beta, gamma)
-    op = PauliExpectation().convert(
-        ~StateFn(Z ^ Z) @ CircuitStateFn(primitive=qc, coeff=1.0)
-    )
-    result = op.eval()
-    return np.real(result)
+    op = Z ^ Z  # Max-Cut Hamiltonian for a 2-node graph
+    expectation = StateFn(op, is_measurement=True) @ StateFn(qc)
+    sampler = CircuitSampler(qi).convert(expectation)
+    value = sampler.eval().real
+    return value
 
 
-# Example parameters
+# Optimizer
+optimizer = COBYLA()
+
+# Initial parameters
 params = np.array([np.pi / 4, np.pi / 4])
 
-# Find the minimum eigenvalue
-optimizer = GradientDescent()
-opt_result = optimizer.optimize(
+# Optimization
+result = optimizer.optimize(
     num_vars=2, objective_function=objective_function, initial_point=params
 )
 
-# Print optimized parameters and result
-print("Optimized Parameters:", opt_result[0])
-print("Minimum Eigenvalue:", opt_result[1])
+print("Optimized Parameters:", result[0])
+print("Minimum Value:", result[1])
