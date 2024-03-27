@@ -10,13 +10,21 @@ Quantum computing harnesses the unique behavior of quantum physics, such as supe
 
 ### Current Experiments
 
-1. **Superposition and Measurement**: Demonstrates the quantum principle of superposition using a Hadamard gate.
-2. **Deutsch-Josza Algorithm**: Implements the Deutsch-Josza algorithm to showcase the efficiency of quantum algorithms.
-3. **Bell State**: Creates and measures a Bell State, demonstrating the concept of quantum entanglement.
-4. **Quantum Fourier Transform (QFT)**: Implements the Quantum Fourier Transform, a key component in many quantum algorithms.
-5. **Quantum Teleportation**: Demonstrates the teleportation of a qubit's state using quantum entanglement and classical communication.
-6. **Quantum Random Number Generator (QRNG)**: Generates truly random numbers by exploiting the inherent randomness of quantum mechanics.
-
+1. [Advanced Bernstein-Vazirani Algorithm](Advanced%20Bernstein-Vazirani%20Algorithm/)
+2. [Bell State](Bell%20State/)
+3. [Bernstein-Vazirani Algorithm](Bernstein-Vazirani%20Algorithm/)
+4. [Deutsch-Josza Algorithm](Deutsch-Josza%20Algorithm/)
+5. [Grover's Algorithm](Grover's%20Algorithm/)
+6. [Hadamard Test](Hadamard%20Test/)
+7. [Quantum Amplitude Amplification](Quantum%20Amplitude%20Amplification/)
+8. [Quantum Approximate Optimization Algorithm](Quantum%20Approximate%20Optimization%20Algorithm/)
+9. [Quantum Circuit Optimization](Quantum%20Circuit%20Optimization/)
+10. [Quantum Counting Algorithm](Quantum%20Counting%20Algorithm/)
+11. [Quantum Error Correction](Quantum%20Error%20Correction/)
+12. [Quantum Error Detection with Parity Check](Quantum%20Error%20Detection%20with%20Parity%20Check/)
+13. [Quantum Fourier Transform](Quantum%20Fourier%20Transform/)
+14. [Quantum Key Distribution](Quantum%20Key%20Distribution/)
+15. [Quantum Phase Estimation (QPE)](Quantum%20Phase%20Estimation%20(QPE)/)
 
 ## Getting Started
 
@@ -24,6 +32,7 @@ Quantum computing harnesses the unique behavior of quantum physics, such as supe
 
 - **Python**: A recent version of Python (3.7 or newer) is required.
 - **Qiskit**: We use Qiskit, an open-source quantum computing framework by IBM. Install it using pip:
+
   ```bash
   pip install qiskit
   ```
@@ -51,18 +60,10 @@ cd QuantumComputingExperiments
 This experiment is crucial for understanding quantum parallelism and interference.
 
 ## Contributing
-
 Contributions to expand or improve the experiments are welcome! 
 
 ## License
-
 This project is licensed under the MIT License - see the `LICENSE` file for details.
 
 ## Acknowledgments
-
 - Thanks to the Qiskit community and IBM for their extensive resources on quantum computing.
-
-
-# TODO
-- update README.md
-- create test for it.
