@@ -1,21 +1,30 @@
-from qiskit import QuantumCircuit, execute, Aer
+from qiskit import QuantumCircuit, assemble, execute, Aer, transpile
 from qiskit.visualization import plot_histogram
-from qiskit.circuit.library import QFT  # Import QFT from the new location
+from qiskit.algorithms import Shor
+from qiskit.circuit.library import qft_dagger
 
 
-def qpe_amod15(a, power):
-    qc = QuantumCircuit(4 + len(power), 4)
-    for j in range(power):
-        qc.h(j)
-    qc.x(3 + power)
-    for repeat in range(power):
-        qc.append(c_amod15(a, 2**repeat), [repeat] + [i + power for i in range(4)])
-    qc.append(QFT(power).inverse(), list(range(power)))  # Use QFT from the new location
-    qc.measure(list(range(power)), list(range(power)))
+def shor(N):
+    qc = QuantumCircuit(4 * N + 2, 2 * N)
+    for qubit in range(2 * N):
+        qc.h(qubit)
+    qc.x(4 * N)
+    for counting_qubit in range(2 * N):
+        for i in range(2 ** (2 * N - 1 - counting_qubit)):
+            qc.unitary(
+                Shor.c_amod15(a, 2 ** (2 * N - 1 - counting_qubit)),
+                [counting_qubit] + [i + n for n in range(3 * N + 1)],
+                label="U",
+            )
+    qc.append(qft_dagger(2 * N), range(2 * N))
+    qc.measure(range(2 * N), range(2 * N))
     return qc
 
 
-qc = qpe_amod15(7, 8)
-simulator = Aer.get_backend("qasm_simulator")
-counts = execute(qc, backend=simulator, shots=1024).result().get_counts()
+qc = shor(15)
+qasm_sim = Aer.get_backend("qasm_simulator")
+t_qc = transpile(qc, qasm_sim)
+qobj = assemble(t_qc)
+results = qasm_sim.run(qobj).result()
+counts = results.get_counts()
 plot_histogram(counts)

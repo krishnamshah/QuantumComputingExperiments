@@ -1,18 +1,29 @@
-# Shor's Algorithm Experiment
+# Shor's Algorithm Implementation
 
-## Overview
-Shor's Algorithm is a quantum algorithm for integer factorization. It's one of the most famous quantum algorithms due to its potential impact on cryptography.
+This repository contains a Python implementation of Shor's Algorithm using the Qiskit library.
 
-## Running the Program
-This program requires Python and Qiskit. It constructs a quantum circuit to implement Shor's Algorithm for factoring the number 15.
+## Requirements
 
-### Procedure:
-1. **Initialization**: Create a quantum circuit with qubits corresponding to the length of the number to be factored, plus ancilla qubits.
-2. **Oracle Application**: Implement the oracle function using controlled modular multiplication gates.
-3. **Algorithm Execution**: Apply Hadamard gates, perform Quantum Fourier Transform, perform measurements, and execute the circuit to reveal the factors.
+- Python 3.6 or later
+- Qiskit
 
-## Understanding the Results
-The output of the circuit will reveal the factors of the number. This algorithm's efficiency contrasts with classical algorithms, which require exponential time to factor large numbers.
+## Installation
 
-## Significance
-Shor's Algorithm demonstrates the potential of quantum computing to solve problems that are infeasible for classical computers, with significant implications for cryptography and security.
+1. Clone this repository.
+2. Install the required packages using pip:
+
+```sh
+pip install qiskit
+```
+## Usage
+Run the shor.py script:
+```sh
+python shor.py
+```
+
+This will execute Shor's Algorithm for the number 15 and display a histogram of the results.
+
+## About Shor's Algorithm
+Shor's Algorithm is a quantum algorithm for integer factorization. It was invented by Peter Shor in 1994 and was the first quantum algorithm to demonstrate the potential to solve certain problems faster than any classical algorithm.
+
+In this implementation, we use the Quantum Fourier Transform and a custom
