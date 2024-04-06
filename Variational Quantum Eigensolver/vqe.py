@@ -1,34 +1,35 @@
-from qiskit import Aer, execute, QuantumCircuit
-from qiskit.circuit import Parameter
-from qiskit.opflow import Z, I
+from qiskit import Aer
+from qiskit.utils import QuantumInstance
+from qiskit.algorithms import VQE
+from qiskit.algorithms.optimizers import COBYLA
+from qiskit.circuit.library import TwoLocal
+from qiskit.opflow import PauliSumOp
+from qiskit.quantum_info import Pauli
+import numpy as np
 
+# Define the Hamiltonian in the Pauli basis
+pauli_dict = {
+    'II': -1.052373245772859,
+    'IZ': 0.39793742484318045,
+    'ZI': -0.39793742484318045,
+    'ZZ': -0.01128010425623538,
+    'XX': 0.18093119978423156
+}
 
-# Define the ansatz circuit
-def ansatz(theta):
-    qc = QuantumCircuit(1)
-    qc.rx(theta, 0)
-    return qc
+qubit_op = PauliSumOp.from_list([(Pauli(label), coeff) for label, coeff in pauli_dict.items()])
 
+# Define the quantum instance
+seed = 50
+quantum_instance = QuantumInstance(Aer.get_backend('statevector_simulator'), seed_transpiler=seed, seed_simulator=seed)
 
-# Objective function to simulate the expectation value of Z for the ansatz state
-def objective_function(theta):
-    # Create a quantum circuit with the ansatz
-    qc = ansatz(theta)
+# Define the variational form (ansatz)
+var_form = TwoLocal(qubit_op.num_qubits, ['ry', 'rz'], 'cz', reps=3)
 
-    # Use the operator Z to measure the expectation value
-    observable = Z
+# Define the classical optimizer
+optimizer = COBYLA(maxiter=500)
 
-    # Convert the circuit to an operator and evaluate the expectation value
-    result = (~StateFn(observable) @ CircuitStateFn(qc)).eval()
+# Run VQE
+vqe = VQE(ansatz=var_form, optimizer=optimizer, quantum_instance=quantum_instance)
+result = vqe.compute_minimum_eigenvalue(qubit_op)
 
-    # Return the real part of the expectation value
-    return np.real(result)
-
-
-# Example usage
-theta = Parameter("θ")
-theta_val = np.pi / 4  # Example parameter value
-
-# Simulate the expectation value
-expectation_value = objective_function(theta_val)
-print("Expectation Value:", expectation_value)
+print('The ground state energy is: {}'.format(result.eigenvalue.real))
