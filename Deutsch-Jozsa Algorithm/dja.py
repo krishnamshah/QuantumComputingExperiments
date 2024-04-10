@@ -1,35 +1,46 @@
 from qiskit import QuantumCircuit, execute, Aer
-from qiskit.visualization import plot_histogram
 
-# Define the number of qubits for the oracle
-n = 3  # Number of qubits used for the input to the oracle
 
-# Create a quantum circuit with n qubits plus one for the oracle's output
-qc = QuantumCircuit(n+1, n)
+def deutsch_josza(oracle, n):
+    qc = QuantumCircuit(n + 1, n)
 
-# Apply Hadamard gates before querying the oracle
-for i in range(n):
-    qc.h(i)
+    # Initialize qubits
+    for i in range(n):
+        qc.h(i)
+    qc.x(n)
+    qc.h(n)
 
-# Prepare the oracle's qubit in the state |->
-qc.x(n)
-qc.h(n)
+    # Apply the oracle
+    qc += oracle
 
-# Define the oracle: Here we'll demonstrate with a balanced oracle
-# For a constant oracle, you can omit the cx gates or ensure they do not change the parity of the input
-for i in range(n):
-    qc.cx(i, n)
+    # Apply Hadamard gates after the oracle
+    for i in range(n):
+        qc.h(i)
 
-# Apply Hadamard gates after querying the oracle
-for i in range(n):
-    qc.h(i)
+    # Measure the first n qubits
+    qc.measure(range(n), range(n))
 
-# Measure the first n qubits
-qc.measure(range(n), range(n))
+    # Execute the circuit
+    backend = Aer.get_backend("qasm_simulator")
+    result = execute(qc, backend, shots=1, memory=True).result()
+    output = result.get_memory()[0]
 
-# Execute the circuit
-simulator = Aer.get_backend('qasm_simulator')
-job = execute(qc, simulator, shots=1)  # Only need one shot to determine the nature of the oracle
-result = job.result()
-counts = result.get_counts(qc)
-print("Measurement results:", counts)
+    return output
+
+
+# Define the oracle for a balanced function
+def balanced_oracle(n):
+    qc = QuantumCircuit(n + 1)
+
+    for qubit in range(n):
+        qc.cx(qubit, n)
+
+    oracle_gate = qc.to_gate()
+    oracle_gate.name = "Oracle"
+
+    return oracle_gate
+
+
+n = 3
+oracle = balanced_oracle(n)
+print(deutsch_josza(oracle, n))
