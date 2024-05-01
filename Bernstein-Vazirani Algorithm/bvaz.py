@@ -1,7 +1,7 @@
 from qiskit import QuantumCircuit, execute, Aer
 
 
-def deutsch_josza(oracle, n):
+def bernstein_vazirani(oracle, n):
     qc = QuantumCircuit(n + 1, n)
 
     # Initialize qubits
@@ -28,12 +28,13 @@ def deutsch_josza(oracle, n):
     return output
 
 
-# Define the oracle for a balanced function
-def balanced_oracle(n):
+# Define the oracle for a hidden integer
+def hidden_integer_oracle(n, hidden_integer):
     qc = QuantumCircuit(n + 1)
 
     for qubit in range(n):
-        qc.cx(qubit, n)
+        if hidden_integer & (1 << qubit):
+            qc.cx(qubit, n)
 
     oracle_gate = qc.to_gate()
     oracle_gate.name = "Oracle"
@@ -42,5 +43,6 @@ def balanced_oracle(n):
 
 
 n = 3
-oracle = balanced_oracle(n)
-print(deutsch_josza(oracle, n))
+hidden_integer = 6
+oracle = hidden_integer_oracle(n, hidden_integer)
+print(bernstein_vazirani(oracle, n))
