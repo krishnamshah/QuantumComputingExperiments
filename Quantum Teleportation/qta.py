@@ -1,41 +1,36 @@
-from qiskit import QuantumCircuit, transpile, assemble, Aer, execute
-from qiskit.visualization import plot_histogram, plot_bloch_multivector
+from qiskit import QuantumCircuit, execute, Aer
+from qiskit.visualization import plot_histogram
 
-# Create a Quantum Circuit with 3 qubits.
-qc = QuantumCircuit(3,3)
 
-# Apply X-gate to the first qubit
-qc.x(0)
+def quantum_teleportation():
+    qc = QuantumCircuit(3, 3)
 
-# Apply H-gate to the second qubit
-qc.h(1)
+    # Prepare the initial state
+    qc.x(0)  # qubit 0 is the one to be teleported
 
-# Apply CNOT-gate on the second and third qubit
-qc.cx(1,2)
+    # Create Bell pair between qubits 1 and 2
+    qc.h(1)
+    qc.cx(1, 2)
 
-# Apply CNOT-gate on the first and second qubit
-qc.cx(0,1)
+    # Apply gates for teleportation protocol
+    qc.cx(0, 1)
+    qc.h(0)
+    qc.measure([0, 1], [0, 1])
 
-# Apply H-gate to the first qubit
-qc.h(0)
+    # Apply correction gates
+    qc.cx(1, 2)
+    qc.cz(0, 2)
 
-# Measure the first and second qubits
-qc.measure([0,1],[0,1])
+    # Measure the final state
+    qc.measure(2, 2)
 
-# Apply CNOT-gate on the second and third qubit
-qc.cx(1,2)
+    return qc
 
-# Apply CZ-gate on the first and third qubit
-qc.cz(0,2)
 
-# Measure the third qubit
-qc.measure(2,2)
-
-# Execute the circuit
-simulator = Aer.get_backend('qasm_simulator')
-job = execute(qc, simulator, shots=1000)
+# Create and execute the quantum teleportation circuit
+qc = quantum_teleportation()
+backend = Aer.get_backend("qasm_simulator")
+job = execute(qc, backend, shots=1024)
 result = job.result()
-
-# Print the result
 counts = result.get_counts(qc)
-print(counts)
+print("Measurement results:", counts)
