@@ -2,43 +2,55 @@ from qiskit import QuantumCircuit, Aer, execute
 from qiskit.visualization import plot_histogram
 import numpy as np
 
+def initialize_walk(qc, total_qubits):
+    """Initialize the quantum walk.
+    Apply a Hadamard gate to the coin qubit to create a superposition of states.
+    """
+    qc.h(total_qubits - 1)
 
-def initialize_walk(qc, qubits):
-    """Initialize the quantum walk."""
-    qc.h(qubits - 1)  # Apply Hadamard to the coin qubit
+def step_walk(qc, total_qubits):
+    """Perform one step of the quantum walk.
+    Apply a conditional swap operation to shift the position of the walker,
+    then apply a Hadamard gate to the coin qubit.
+    """
+    for i in range(total_qubits - 1):
+        qc.cswap(total_qubits - 1, i, i + 1)
+    qc.h(total_qubits - 1)
 
+def quantum_walk(steps):
+    """Perform a quantum walk of a given number of steps and return the resulting quantum circuit."""
+    total_qubits = steps + 1
+    qc = QuantumCircuit(total_qubits, steps)
 
-def step_walk(qc, qubits):
-    """Perform one step of the quantum walk."""
-    # Apply the conditional shift operation
-    for i in range(qubits - 1):
-        qc.cswap(qubits - 1, i, i + 1)
-    # Apply a Hadamard gate to the coin qubit
-    qc.h(qubits - 1)
+    initialize_walk(qc, total_qubits)
 
+    for _ in range(steps):
+        step_walk(qc, total_qubits)
 
-# Number of steps of the walk
-steps = 3
+    qc.measure(list(range(steps)), list(range(steps)))
 
-# Total number of qubits (n qubits for the walk, 1 qubit for the coin)
-qubits = steps + 1
+    return qc
 
-# Create a quantum circuit
-qc = QuantumCircuit(qubits)
+def simulate_circuit(qc):
+    """Simulate a quantum circuit and return the measurement counts."""
+    simulator = Aer.get_backend("qasm_simulator")
+    job = execute(qc, simulator, shots=1024)
+    result = job.result()
+    counts = result.get_counts(qc)
+    return counts
 
-# Initialize the walk
-initialize_walk(qc, qubits)
+def visualize_results(counts):
+    """Visualize the results of a quantum walk using a histogram."""
+    plot_histogram(counts)
 
-# Perform the steps of the walk
-for _ in range(steps):
-    step_walk(qc, qubits)
+# Perform a quantum walk of 3 steps
+qc = quantum_walk(3)
 
-# Measure the position qubits
-qc.measure_all()
+# Simulate the quantum walk and get the measurement counts
+counts = simulate_circuit(qc)
 
-# Simulate the circuit
-simulator = Aer.get_backend("qasm_simulator")
-job = execute(qc, simulator, shots=1024)
-result = job.result()
-counts = result.get_counts(qc)
+# Print the measurement results
 print("Measurement results:", counts)
+
+# Visualize the results
+visualize_results(counts)
